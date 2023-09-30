@@ -8,58 +8,125 @@ import org.json.JSONObject;
 public class Card {
 
     String name;
-    List<String> colours;
-    List<String> superTypes;
-    List<String> subTypes;
+    String manaCost;
     int manaValue;
+    String colours = "";
+    String colourIdentity = "";
+    String power = "";
+    String toughness = "";
+    SuperTypes superTypes;
+    String subTypes = "";
 
     public Card(JSONObject cardData) {
-        setTypes(cardData.getString("type_line"));
-        setColours(cardData.getJSONArray("color_identity"));
         setName(cardData.getString("name"));
         setManaValue(cardData.getDouble("cmc"));
+        setColours(cardData.getJSONArray("colors"));
+        setColourIdentity(cardData.getJSONArray("color_identity"));
+        if (isDoubleFacedCard(cardData)) {
+            handleDoubleFacedCardData(cardData);
+        } else {
+            handleSingleFacedCardData(cardData);
+        }
     }
 
-    private void setName(String cardName) {
-        name = cardName;
+    private void handleSingleFacedCardData(JSONObject cardData) {
+        setManaCost(cardData.getString("mana_cost"));
+        setTypes(cardData.getString("type_line"));
+        if (superTypes.isCreature()){
+            setPower(cardData.getString("power"));
+            setToughness(cardData.getString("toughness"));
+        }
+    }
+
+    private void handleDoubleFacedCardData(JSONObject cardData) {
+        setManaCost(cardData.getJSONArray("card_faces").getJSONObject(0).getString("mana_cost"));
+        setTypes(cardData.getString("type_line"));
+        if (superTypes.isCreature()){
+            setPower(cardData.getJSONArray("card_faces").getJSONObject(0).getString("power"));
+            setToughness(cardData.getJSONArray("card_faces").getJSONObject(0).getString("toughness"));
+        }
+    }
+
+    private boolean isDoubleFacedCard(JSONObject cardData) {
+        if (cardData.getJSONArray("card_faces").length() > 1) {
+            return true;
+        }
+        return false;
+    }
+
+    private void setName(String name) {
+        this.name = name.replaceAll(",", "");
+    }
+
+    private void setManaCost(String manaCost) {
+        this.manaCost = manaCost;
+    }
+    
+    private void setManaValue(Double manaValue) {
+        this.manaValue = manaValue.intValue();
+    }
+
+    private void setPower(String power) {
+        this.power = power;
+    }
+
+    private void setToughness(String toughness) {
+        this.toughness = toughness;
+    }
+
+    private void setColourIdentity(JSONArray colourIdentity) {
+        for (Object colour : colourIdentity) {
+            this.colourIdentity += colour.toString();
+        }
+    }
+
+    private void setColours(JSONArray colours) {
+        for (Object colour : colours) {
+            this.colours += colour.toString();
+        }
     }
 
     private void setTypes(String typeLine) {
         String[] types = typeLine.split(" — ");
-        superTypes = Arrays.asList(types[0].split(" "));
+        List<String> superTypeList = Arrays.asList(types[0].split(" "));
+        superTypes = new SuperTypes(superTypeList);
         if (types.length == 2) {
-            subTypes = Arrays.asList(typeLine.split(" — ")[1].split(" "));
+            subTypes = typeLine.split(" — ")[1];
         }
-    }
-
-    private void setColours(JSONArray colourIdentity) {
-        colours = new ArrayList<String>();
-        for (Object colour : colourIdentity) {
-            colours.add(colour.toString());
-        }
-    }
-    
-    private void setManaValue(Double cmc) {
-        manaValue = cmc.intValue();
     }
 
     public String getName() {
         return name;
     }
 
-    public List<String> getColours() {
+    public String getColours() {
         return colours;
     }
 
-    public List<String> getSuperTypes() {
+    public SuperTypes getSuperTypes() {
         return superTypes;
     }
 
-    public List<String> getSubTypes() {
+    public String getSubTypes() {
         return subTypes;
     }
 
     public int getManaValue() {
         return manaValue;
+    }
+    public String getManaCost() {
+        return manaCost;
+    }
+
+    public String getColourIdentity() {
+        return colourIdentity;
+    }
+
+    public String getPower() {
+        return power;
+    }
+
+    public String getToughness() {
+        return toughness;
     }
 }

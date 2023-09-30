@@ -12,7 +12,7 @@ public class Main {
         decks = DecklistReader.getDecks(decklistsFilePath);
 
         // DeckWriter.writeDeckInfoToFile(decks);
-        Writer.writeDeckInfoToCSV(decks);
-        CSVTransposer.transposeCSV();
+        Writer.writeCardInfoToCSV(decks);
+        // CSVTransposer.transposeCSV();
     }
 }

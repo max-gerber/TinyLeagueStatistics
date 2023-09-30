@@ -6,14 +6,16 @@ import org.json.JSONObject;
 
 public class DeckUtils {
 
-    public static Map<Card, Integer> extractCardsFromJson(JSONObject cardsJson) {
-        Map<Card, Integer> cards = new HashMap<>();
+    public static List<Card> extractCardsFromJson(JSONObject cardsJson) {
+        List<Card> cards = new ArrayList<Card>();
         Iterator<String> keys = cardsJson.keys();
         while(keys.hasNext()) {
             String key = keys.next();
             JSONObject cardObject = cardsJson.getJSONObject(key);
             Card card = new Card(cardObject.getJSONObject("card"));
-            cards.put(card, cards.getOrDefault(card, 0) + 1);
+            if (!cards.contains(card)) {
+                cards.add(card);
+            }
         }
         return cards;
     }
@@ -48,8 +50,8 @@ public class DeckUtils {
     public static String extractColourIdentityFromCommanders(List<Card> commanders) {
         String colourIdentity = "";
         for (Card commander : commanders) {
-            for (String colour : commander.colours) {
-                if (!colourIdentity.contains(colour)) {
+            for (char colour : commander.colours.toCharArray()) {
+                if (colourIdentity.indexOf(String.valueOf(colour)) == -1) {
                     colourIdentity += colour;
                 }
             }

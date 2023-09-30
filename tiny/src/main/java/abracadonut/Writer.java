@@ -5,82 +5,71 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 public class Writer {
 
-    public static void writeDeckInfoToCSV(List<Deck> decks) {
-        Statistics statistics = new Statistics(decks);
-        String csvFilePath = "statisticsPreTransposition.csv";
+    public static void writeCardInfoToCSV(List<Deck> decks) {
+        String csvFilePath = "statistics.csv";
+        List<CardStatistic> cardStatistics = CardStatisticsUtils.getCardStatistics(decks);
+
+        //sort CardStatistics?
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath))) {
-            writeStatistics(writer, statistics.getMainboardCards(), "Mainboard Cards");
-            writeStatistics(writer, statistics.getSideboardCards(), "Sideboard Cards");
-            writeStatistics(writer, statistics.getCommanders(), "Commanders");
-            writeStatistics(writer, statistics.getColours(), "Colours");
-            writeStatistics(writer, statistics.getColourCombinations(), "Colour Combinations");
-            writeStatistics(writer, statistics.getCreatures(), "Creatures");
-            writeStatistics(writer, statistics.getInstants(), "Instants");
-            writeStatistics(writer, statistics.getSorceries(), "Sorceries");
-            writeStatistics(writer, statistics.getEnchantments(), "Enchantments");
-            writeStatistics(writer, statistics.getArtifacts(), "Artifacts");
-            writeStatistics(writer, statistics.getLands(), "Lands");
-            writeStatistics(writer, statistics.getPlaneswalkers(), "Planeswalkers");
-            writeStatistics(writer, statistics.getBattles(), "Battles");
-            writeStatistics(writer, statistics.getManaValues(), "Mana Values");
+            writeHeader(writer);
+            for (CardStatistic cardStatistic : cardStatistics) {
+                writeCardStatisticData(writer, cardStatistic);
+            }
+            System.out.println("Successfully wrote data to " + csvFilePath);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void writeStatistics(BufferedWriter writer, Map<String, Integer> data, String property) throws IOException {
-        writeProperty(writer, data, property);
-        writeQunatity(writer, data);
-    }
-
-    private static void writeProperty(BufferedWriter writer, Map<String, Integer> data, String property) throws IOException {
-        writer.write(property + ",,");
-        for (Map.Entry<String, Integer> entry : data.entrySet()) {
-            writer.write(entry.getKey().replace(",", "") + ",");
-        }
+    private static void writeCardStatisticData(BufferedWriter writer, CardStatistic cardStatistic) throws IOException {
+        Card card = cardStatistic.card;
+        writer.write(card.getName() + ",");
+        writer.write(cardStatistic.getMainboardCount() + ",");
+        writer.write(cardStatistic.getSideboardCount() + ",");
+        writer.write(card.getManaCost() + ",");
+        writer.write(card.getManaValue() + ",");
+        writer.write(card.getColours() + ",");
+        writer.write(card.getColourIdentity() + ",");
+        writer.write(card.getPower() + ",");
+        writer.write(card.getToughness() + ",");
+        writer.write(card.getSubTypes() + ",");
+        writeSuperTypes(writer, card.superTypes);
         writer.newLine();
     }
 
-    private static void writeQunatity(BufferedWriter writer, Map<String, Integer> data) throws IOException {
-        writer.write("Quantity,,");
-        for (Map.Entry<String, Integer> entry : data.entrySet()) {
-            writer.write(entry.getValue() + ",");
-        }
+    private static void writeHeader(BufferedWriter writer) throws IOException {
+        writer.write("Name,");
+        writer.write("Mainboard Count,");
+        writer.write("Sideboard Count,");
+        writer.write("Mana Cost,");
+        writer.write("Mana Value,");
+        writer.write("Colours,");
+        writer.write("Colour Identity,");
+        writer.write("Power,");
+        writer.write("Toughness,");
+        writer.write("Subtypes,");
+        writer.write("Is Creature,");
+        writer.write("Is Instant,");
+        writer.write("Is Sorcery,");
+        writer.write("Is Enchantment,");
+        writer.write("Is Artifact,");
+        writer.write("Is Land,");
+        writer.write("Is Planeswalker,");
+        writer.write("Is Battle,");
         writer.newLine();
     }
 
-    public static void writeDeckInfoToFile(List<Deck> decks) {
-        Statistics stats = new Statistics(decks);
-        writeMapToFile(stats.mainboardCards, "Mainboard Cards.txt");
-        writeMapToFile(stats.sideboardCards, "Sideboard Cards.txt");
-        writeMapToFile(stats.commanders, "Commanders.txt");
-        writeMapToFile(stats.colours, "Colours.txt");
-        writeMapToFile(stats.creatures, "Creatures.txt");
-        writeMapToFile(stats.instants, "Instants.txt");
-        writeMapToFile(stats.sorceries, "Sorceries.txt");
-        writeMapToFile(stats.enchantments, "Enchantments.txt");
-        writeMapToFile(stats.artifacts, "Artifacts.txt");
-        writeMapToFile(stats.lands, "Lands.txt");
-        writeMapToFile(stats.planeswalkers, "Planeswalkers.txt");
-        writeMapToFile(stats.battles, "Battles.txt");
-    }
-
-    private static void writeMapToFile(Map<String, Integer> data, String fileName) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-        try {
-            ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
-            objectWriter.writeValue(new FileWriter(fileName), data);
-            System.out.println("Successfully wrote data to " + fileName);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private static void writeSuperTypes(BufferedWriter writer, SuperTypes superTypes) throws IOException {
+        writer.write((superTypes.isCreature() ? 1 : 0) + ",");
+        writer.write((superTypes.isInstant() ? 1 : 0) + ",");
+        writer.write((superTypes.isSorcery() ? 1 : 0) + ",");
+        writer.write((superTypes.isEnchantment() ? 1 : 0) + ",");
+        writer.write((superTypes.isArtifact() ? 1 : 0) + ",");
+        writer.write((superTypes.isLand() ? 1 : 0) + ",");
+        writer.write((superTypes.isPlaneswalker() ? 1 : 0) + ",");
+        writer.write((superTypes.isBattle() ? 1 : 0) + ",");
     }
 }

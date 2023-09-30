@@ -8,10 +8,8 @@ public class Deck {
     private List<Card> commanders;
     private boolean hasPartner;
     private String colourIdentity;
-    private Map<String, Float> colourPercentages;
-    private Map<Card, Integer> mainboard;
-    private Map<Card, Integer> sideboard;
-    private Card companion;
+    private List<Card> mainboard;
+    private List<Card> sideboard;
 
     public Deck(String deckId) {
         JSONObject deckInfo = MoxfieldApi.getDecklist(deckId);
@@ -22,16 +20,9 @@ public class Deck {
             colourIdentity = DeckUtils.extractColourIdentityFromCommanders(commanders);
             mainboard = DeckUtils.extractCardsFromJson(deckInfo.getJSONObject("mainboard"));
             sideboard = DeckUtils.extractCardsFromJson(deckInfo.getJSONObject("sideboard"));
-            if (hasCompanions(deckInfo)) {
-                companion = DeckUtils.extractCompanionFromJson(deckInfo.getJSONObject("companions"));
-            }
         } catch (Exception e) {
             System.err.println("There was an error adding a deck: \n"+ deckInfo.toString(2) +"\n\n" + e);
         }
-    }
-
-    private boolean hasCompanions(JSONObject deckInfo) {
-        return (Integer) deckInfo.get("companionsCount") != 0;
     }
 
     public List<Card> getCommanders() {
@@ -42,23 +33,15 @@ public class Deck {
         return hasPartner;
     }
 
-    public Card getCompanion() {
-        return companion;
-    }
-
     public String getColourIdentity() {
         return colourIdentity;
     }
 
-    public Map<String, Float> getColourPercentages() {
-        return colourPercentages;
-    }
-
-    public Map<Card, Integer> getMainboard() {
+    public List<Card> getMainboard() {
         return mainboard;
     }
 
-    public Map<Card, Integer> getSideboard() {
+    public List<Card> getSideboard() {
         return sideboard;
     }
 }
