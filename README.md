@@ -6,5 +6,5 @@ To run:
 3. Download and extract the code (green `Code` button on this screen)
 4. Navigate to `whereverYouExtractedThisTo\TinyLeague\tiny` in a terminal
 5. Run `mvn clean package`
-6. Add decklists to `decklists.txt` in `\tiny\target` in the order they came in the league
+6. Add moxfield decklist links to `decklists.txt` in `\tiny\target` in the order they came in the league
 7. Execute `\tiny\target\tiny-v1-jar-with-dependancies.jar`
