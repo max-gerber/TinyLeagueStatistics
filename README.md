@@ -1,6 +1,6 @@
-# Tiny Leaders Reborn Discord League Data
+# Tiny Leaders Reborn Discord League Data #
 
-To run:
+### To run: ###
 1. [Install a JDK](https://docs.oracle.com/en/java/javase/20/install/overview-jdk-installation.html)
 2. [Install maven](https://maven.apache.org/install.html)
 3. Download and extract the code (green `Code` button on this screen)
