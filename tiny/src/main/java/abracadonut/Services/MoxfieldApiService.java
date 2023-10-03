@@ -1,11 +1,11 @@
-package abracadonut;
+package abracadonut.Services;
 
 import org.json.JSONObject;
 
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-public class MoxfieldApi {
+public class MoxfieldApiService {
 
     static String baseUrl = "https://api2.moxfield.com/v2/decks";
 

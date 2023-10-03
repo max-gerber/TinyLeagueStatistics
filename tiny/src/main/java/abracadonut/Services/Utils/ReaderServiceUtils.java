@@ -1,12 +1,14 @@
-package abracadonut;
+package abracadonut.Services.Utils;
 
 import java.util.*;
 
 import org.json.JSONObject;
 
-public class DeckUtils {
+import abracadonut.Objects.Card;
 
-    public static List<Card> extractCardsFromJson(JSONObject cardsJson) {
+public class ReaderServiceUtils {
+
+    public static List<Card> extractCards(JSONObject cardsJson) {
         List<Card> cards = new ArrayList<Card>();
         Iterator<String> keys = cardsJson.keys();
         while(keys.hasNext()) {
@@ -20,22 +22,11 @@ public class DeckUtils {
         return cards;
     }
 
-    public static Map<String, Float> extractColourPercentagesFromJson(JSONObject colourPercentagesJson) {
-        Map<String, Float> colourPercentages = new HashMap<>();
-        Iterator<String> keys = colourPercentagesJson.keys();
-        while(keys.hasNext()) {
-            String key = keys.next();
-            Float value = Float.parseFloat(colourPercentagesJson.get(key).toString());
-            colourPercentages.put(key, value);
-        }
-        return colourPercentages;
-    }
-
-    public static Card extractCompanionFromJson(JSONObject companions) {
+    public static Card extractCompanion(JSONObject companions) {
         return new Card(companions.getJSONObject(companions.keys().next()).getJSONObject("card"));
     }
 
-    public static List<Card> extractCommandersFromJson(JSONObject commanders) {
+    public static List<Card> extractCommanders(JSONObject commanders) {
         List<Card> commanderCards = new ArrayList<Card>();
         List<String> commanderNames = new ArrayList<String>(commanders.keySet());
         JSONObject commanderObject = (JSONObject) commanders.get(commanderNames.get(0));
@@ -47,15 +38,26 @@ public class DeckUtils {
         return commanderCards;
     }
 
-    public static String extractColourIdentityFromCommanders(List<Card> commanders) {
+    public static String extractColourIdentity(List<Card> commanders) {
         String colourIdentity = "";
         for (Card commander : commanders) {
-            for (char colour : commander.colours.toCharArray()) {
+            for (char colour : commander.getColours().toCharArray()) {
                 if (colourIdentity.indexOf(String.valueOf(colour)) == -1) {
                     colourIdentity += colour;
                 }
             }
         }
         return colourIdentity;
+    }
+
+    public static String extractDeckId(String deckUrl) {
+        int lastIndex = deckUrl.lastIndexOf("/");
+
+        if (lastIndex != -1) {
+            return deckUrl.substring(lastIndex + 1);
+        } else {
+            System.out.println(deckUrl + " is not a valid URL");
+            return "";
+        }
     }
 }

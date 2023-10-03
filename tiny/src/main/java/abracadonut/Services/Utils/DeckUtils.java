@@ -1,13 +1,16 @@
-package abracadonut;
+package abracadonut.Services.Utils;
 
 import java.util.*;
 
-public class CardStatisticsUtils {
+import abracadonut.Objects.Card;
+import abracadonut.Objects.CardStatistic;
+import abracadonut.Objects.Deck;
+
+public class DeckUtils {
     public static List<CardStatistic> getCardStatistics(List<Deck> decks) {
         Map<String, CardStatistic> cardStatisticsMap = new HashMap<String, CardStatistic>();
 
         for (Deck deck : decks) {
-            //handle commanders?
             for (Card mainboardCard : deck.getMainboard()) {
                 String cardName = mainboardCard.getName();
                 if (cardStatisticsMap.keySet().contains(cardName)) {

@@ -1,4 +1,6 @@
 *.class
-*.txt
 *.csv
 *.vscode
+*.properties
+*.lst
+*.jar

@@ -1,6 +1,6 @@
-package abracadonut;
+package abracadonut.Objects;
 
-public class CardStatistic {
+public class CardStatistic implements Comparable<CardStatistic> {
 
     Card card;
     int mainboardCount = 0;
@@ -22,7 +22,7 @@ public class CardStatistic {
     public void incrementSideboard() {
         sideboardCount++;
     }
-    
+
     public Card getCard() {
         return card;
     }
@@ -33,5 +33,10 @@ public class CardStatistic {
 
     public int getSideboardCount() {
         return sideboardCount;
+    }
+
+    @Override
+    public int compareTo(CardStatistic other) {
+        return Integer.compare(other.mainboardCount, this.mainboardCount);
     }
 }

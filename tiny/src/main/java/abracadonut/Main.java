@@ -2,6 +2,10 @@ package abracadonut;
 
 import java.util.*;
 
+import abracadonut.Objects.Deck;
+import abracadonut.Services.ReaderService;
+import abracadonut.Services.WriterService;
+
 public class Main {
 
     static String decklistsFilePath = "decklists.txt";
@@ -9,10 +13,8 @@ public class Main {
     public static void main(String[] args) {
         List<Deck> decks = new ArrayList<>();
 
-        decks = DecklistReader.getDecks(decklistsFilePath);
+        decks = ReaderService.getDecks(decklistsFilePath);
 
-        // DeckWriter.writeDeckInfoToFile(decks);
-        Writer.writeCardInfoToCSV(decks);
-        // CSVTransposer.transposeCSV();
+        WriterService.writeToCSV(decks);
     }
 }

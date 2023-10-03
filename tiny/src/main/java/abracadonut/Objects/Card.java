@@ -1,4 +1,4 @@
-package abracadonut;
+package abracadonut.Objects;
 
 import java.util.*;
 
@@ -55,7 +55,7 @@ public class Card {
     }
 
     private void setName(String name) {
-        this.name = name.replaceAll(",", "");
+        this.name = name;
     }
 
     private void setManaCost(String manaCost) {
@@ -96,7 +96,7 @@ public class Card {
     }
 
     public String getName() {
-        return name;
+        return name.replaceAll(",", "");
     }
 
     public String getColours() {

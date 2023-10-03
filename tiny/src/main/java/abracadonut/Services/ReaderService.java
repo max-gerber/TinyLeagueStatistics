@@ -1,11 +1,14 @@
-package abracadonut;
+package abracadonut.Services;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class DecklistReader {
+import abracadonut.Objects.Deck;
+import abracadonut.Services.Utils.ReaderServiceUtils;
+
+public class ReaderService {
     
     public static List<Deck> getDecks(String decklistsFilePath) {
         List<String> deckIds = getDeckIds(decklistsFilePath);
@@ -24,7 +27,7 @@ public class DecklistReader {
             String deckUrl;
 
             while ((deckUrl = br.readLine()) != null) {
-                String deckId = extractDeckId(deckUrl);
+                String deckId = ReaderServiceUtils.extractDeckId(deckUrl);
                 
                 if (deckId != "") {
                     decks.add(deckId);
@@ -35,16 +38,5 @@ public class DecklistReader {
         }
 
         return decks;
-    }
-
-    private static String extractDeckId(String deckUrl) {
-        int lastIndex = deckUrl.lastIndexOf("/");
-
-        if (lastIndex != -1) {
-            return deckUrl.substring(lastIndex + 1);
-        } else {
-            System.out.println(deckUrl + " is not a valid URL");
-            return "";
-        }
     }
 }
