@@ -55,7 +55,7 @@ public class Card {
     }
 
     private void setName(String name) {
-        this.name = name;
+        this.name = name.split(" // ")[0];
     }
 
     private void setManaCost(String manaCost) {
@@ -87,11 +87,12 @@ public class Card {
     }
 
     private void setTypes(String typeLine) {
-        String[] types = typeLine.split(" — ");
+        String[] types = new String[2];
+        types = typeLine.split(" // ")[0].split(" — ");
         List<String> superTypeList = Arrays.asList(types[0].split(" "));
         superTypes = new SuperTypes(superTypeList);
         if (types.length == 2) {
-            subTypes = typeLine.split(" — ")[1];
+            subTypes = types[1];
         }
     }
 
