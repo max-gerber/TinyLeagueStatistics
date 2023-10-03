@@ -44,7 +44,7 @@ public class WriterService {
             int placementCount = 0;
 
             for (Deck deck : decks) {
-                WriterServiceUtils.writeDeckData(writer, deck, placementCount++);
+                WriterServiceUtils.writeDeckData(writer, deck, ++placementCount);
             }
             System.out.println("Successfully wrote data to " + csvFilePath);
 
