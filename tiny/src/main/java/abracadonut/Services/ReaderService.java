@@ -15,7 +15,11 @@ public class ReaderService {
         List<Deck> decks = new ArrayList<>();
 
         for (String deckId : deckIds) {
-            decks.add(new Deck(deckId));
+            try {
+                decks.add(new Deck(deckId));
+            } catch (Exception e) {
+                System.err.println("There was an error adding a deck : https://www.moxfield.com/decks/"+ deckId +"\n\n" + e);
+            }
         }
         return decks;
     }

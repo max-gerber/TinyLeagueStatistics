@@ -17,7 +17,7 @@ public class Deck {
     private List<Card> mainboard;
     private List<Card> sideboard;
 
-    public Deck(String deckId) {
+    public Deck(String deckId) throws Exception{
         JSONObject deckInfo = MoxfieldApiService.getDecklist(deckId);
 
         try {
@@ -30,7 +30,7 @@ public class Deck {
             mainboard = ReaderServiceUtils.extractCards(deckInfo.getJSONObject("mainboard"));
             sideboard = ReaderServiceUtils.extractCards(deckInfo.getJSONObject("sideboard"));
         } catch (Exception e) {
-            System.err.println("There was an error adding a deck: \n"+ deckInfo.toString(2) +"\n\n" + e);
+            throw e;
         }
     }
 

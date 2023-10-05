@@ -87,12 +87,10 @@ public class Card {
     }
 
     private void setTypes(String typeLine) {
-        String[] types = new String[2];
-        types = typeLine.split(" // ")[0].split(" — ");
-        List<String> superTypeList = Arrays.asList(types[0].split(" "));
+        List<String> superTypeList = Arrays.asList(typeLine.split(" // ")[0].split(" — ")[0].split(" "));
         superTypes = new SuperTypes(superTypeList);
-        if (types.length == 2) {
-            subTypes = types[1];
+        if (typeLine.split(" // ")[0].split(" — ").length == 2) {
+            subTypes = typeLine.split(" // ")[0].split(" — ")[1];
         }
     }
 
