@@ -11,21 +11,40 @@ public class DeckUtils {
         Map<String, CardStatistic> cardStatisticsMap = new HashMap<String, CardStatistic>();
 
         for (Deck deck : decks) {
-            for (Card mainboardCard : deck.getMainboard()) {
-                String cardName = mainboardCard.getName();
+            List<CardStatistic> deckStatistics = getCardStatistics(deck);
+
+            for (CardStatistic card : deckStatistics) {
+                String cardName = card.getCard().getName();
+
                 if (cardStatisticsMap.keySet().contains(cardName)) {
-                    cardStatisticsMap.get(cardName).incrementMainboard();;
+                    cardStatisticsMap.get(cardName).incrementMainboard(card.getMainboardCount());
+                    cardStatisticsMap.get(cardName).incrementSideboard(card.getSideboardCount());
                 } else {
-                    cardStatisticsMap.put(cardName, new CardStatistic(mainboardCard, true));
+                    cardStatisticsMap.put(cardName, card);
                 }
             }
-            for (Card sideboardCard : deck.getSideboard()) {
-                String cardName = sideboardCard.getName();
-                if (cardStatisticsMap.keySet().contains(cardName)) {
-                    cardStatisticsMap.get(cardName).incrementSideboard();
-                } else {
-                    cardStatisticsMap.put(cardName, new CardStatistic(sideboardCard, false));
-                }
+        }
+
+        return new ArrayList<CardStatistic>(cardStatisticsMap.values());
+    }
+
+    public static List<CardStatistic> getCardStatistics(Deck deck) {
+        Map<String, CardStatistic> cardStatisticsMap = new HashMap<String, CardStatistic>();
+
+        for (Card mainboardCard : deck.getMainboard()) {
+            String cardName = mainboardCard.getName();
+            if (cardStatisticsMap.keySet().contains(cardName)) {
+                cardStatisticsMap.get(cardName).incrementMainboard();;
+            } else {
+                cardStatisticsMap.put(cardName, new CardStatistic(mainboardCard, true));
+            }
+        }
+        for (Card sideboardCard : deck.getSideboard()) {
+            String cardName = sideboardCard.getName();
+            if (cardStatisticsMap.keySet().contains(cardName)) {
+                cardStatisticsMap.get(cardName).incrementSideboard();
+            } else {
+                cardStatisticsMap.put(cardName, new CardStatistic(sideboardCard, false));
             }
         }
 

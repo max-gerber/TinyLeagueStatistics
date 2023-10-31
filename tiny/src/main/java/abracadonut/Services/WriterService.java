@@ -13,22 +13,24 @@ import abracadonut.Services.Utils.WriterServiceUtils;
 public class WriterService {
 
     public static void writeToCSV(List<Deck> decks) {
-        writeCardStatistics(decks);
-        writeDeckData(decks);
+        writeCards(decks);
+        writeCommanders(decks);
+        writeDecks(decks);
     }
 
-    private static void writeCardStatistics(List<Deck> decks) {
-        String csvFilePath = "Card Statistics.csv";
+    private static void writeCards(List<Deck> decks) {
+        String csvFilePath = "Card Data.csv";
         List<CardStatistic> cardStatistics = DeckUtils.getCardStatistics(decks);
 
         Collections.sort(cardStatistics);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath))) {
-            WriterServiceUtils.writeCardsHeader(writer);
+            WriterServiceUtils.writeCardDataHeader(writer);
 
             for (CardStatistic cardStatistic : cardStatistics) {
                 WriterServiceUtils.writeCardData(writer, cardStatistic);
             }
+
             System.out.println("Successfully wrote data to " + csvFilePath);
 
         } catch (IOException e) {
@@ -36,20 +38,45 @@ public class WriterService {
         }
     }
 
-    private static void writeDeckData(List<Deck> decks) {
-        String csvFilePath = "Deck Data.csv";
+    private static void writeCommanders(List<Deck> decks) {
+        String csvFilePath = "Commander Data.csv";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath))) {
-            WriterServiceUtils.writeDecksHeader(writer);
+            WriterServiceUtils.writeCommanderDataHeader(writer);
             int placementCount = 0;
 
             for (Deck deck : decks) {
-                WriterServiceUtils.writeDeckData(writer, deck, ++placementCount);
+                WriterServiceUtils.writeCommandersData(writer, deck, ++placementCount);
             }
+
             System.out.println("Successfully wrote data to " + csvFilePath);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void writeDecks(List<Deck> decks) {
+        for (Deck deck : decks) {
+            String csvFilePath = cleanName(deck.getName()) + " - " + cleanName(deck.getCreator()) + ".csv";
+            List<CardStatistic> cardStatistics = DeckUtils.getCardStatistics(deck);
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(csvFilePath))) {
+                WriterServiceUtils.writeCardDataHeader(writer);
+                
+                for (CardStatistic cardStatistic : cardStatistics) {
+                    WriterServiceUtils.writeCardData(writer, cardStatistic);
+                }
+
+                System.out.println("Successfully wrote data to " + csvFilePath);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static String cleanName(String name) {
+        return name.replaceAll("/", "").replaceAll(":", "");
     }
 }

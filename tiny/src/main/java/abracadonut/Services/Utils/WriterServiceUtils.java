@@ -10,7 +10,7 @@ import abracadonut.Objects.SuperTypes;
 
 public class WriterServiceUtils {
 
-    public static void writeCardsHeader(BufferedWriter writer) throws IOException {
+    public static void writeCardDataHeader(BufferedWriter writer) throws IOException {
         writer.write("Name,");
         writer.write("Mainboard Count,");
         writer.write("Sideboard Count,");
@@ -32,7 +32,7 @@ public class WriterServiceUtils {
         writer.newLine();
     }
 
-    public static void writeDecksHeader(BufferedWriter writer) throws IOException {
+    public static void writeCommanderDataHeader(BufferedWriter writer) throws IOException {
         writer.write("Placement,");
         writer.write("Deck Name,");
         writer.write("User,");
@@ -55,7 +55,7 @@ public class WriterServiceUtils {
 
     public static void writeCardData(BufferedWriter writer, CardStatistic cardStatistic) throws IOException {
         Card card = cardStatistic.getCard();
-        writer.write(card.getName() + ",");
+        writer.write(cleanName(card.getName()) + ",");
         writer.write(cardStatistic.getMainboardCount() + ",");
         writer.write(cardStatistic.getSideboardCount() + ",");
         writer.write(card.getManaCost() + ",");
@@ -69,10 +69,10 @@ public class WriterServiceUtils {
         writer.newLine();
     }
 
-    public static void writeDeckData(BufferedWriter writer, Deck deck, int placementCount) throws IOException {
+    public static void writeCommandersData(BufferedWriter writer, Deck deck, int placementCount) throws IOException {
         writer.write(placementCount + ",");
-        writer.write(deck.getName() + ",");
-        writer.write(deck.getCreator() + ",");
+        writer.write(cleanName(deck.getName()) + ",");
+        writer.write(cleanName(deck.getCreator()) + ",");
         writer.write(deck.getUrl() + ",");
         writer.write(deck.getColourIdentity() + ",");
         writeCommanderData(writer, deck.getCommanders().get(0), false);
@@ -87,7 +87,7 @@ public class WriterServiceUtils {
         if (isPartner) {
             writer.write(",,,,,");
         }
-        writer.write(commander.getName() + ",");
+        writer.write(cleanName(commander.getName()) + ",");
         writer.write(commander.getManaCost() + ",");
         writer.write(commander.getManaValue() + ",");
         writer.write(commander.getColours() + ",");
@@ -109,5 +109,9 @@ public class WriterServiceUtils {
             writer.write((superTypes.isBattle() ? 1 : 0) + ",");
             writer.write((superTypes.isLand() ? 1 : 0) + ",");
         }
+    }
+
+    private static String cleanName(String name) {
+        return name.replaceAll(",", "");
     }
 }

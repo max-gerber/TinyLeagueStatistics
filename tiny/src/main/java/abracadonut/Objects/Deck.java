@@ -39,11 +39,11 @@ public class Deck {
     }
 
     public String getName() {
-        return name.replaceAll(",", "");
+        return name;
     }
 
     public String getCreator() {
-        return creator.replaceAll(",", "");
+        return creator;
     }
 
     public List<Card> getCommanders() {

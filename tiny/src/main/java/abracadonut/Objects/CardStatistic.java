@@ -19,8 +19,16 @@ public class CardStatistic implements Comparable<CardStatistic> {
         mainboardCount++;
     }
 
+    public void incrementMainboard(int incrementAmmount) {
+        mainboardCount += incrementAmmount;
+    }
+
     public void incrementSideboard() {
         sideboardCount++;
+    }
+
+    public void incrementSideboard(int incrementAmmount) {
+        sideboardCount += incrementAmmount;
     }
 
     public Card getCard() {

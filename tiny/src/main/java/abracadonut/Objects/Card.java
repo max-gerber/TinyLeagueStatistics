@@ -95,7 +95,7 @@ public class Card {
     }
 
     public String getName() {
-        return name.replaceAll(",", "");
+        return name;
     }
 
     public String getColours() {
